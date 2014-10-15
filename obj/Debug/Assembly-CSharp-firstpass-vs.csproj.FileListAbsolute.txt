@@ -1,0 +1,10 @@
+C:\Users\Galantir\Documents\GitHub\ProjectA\Temp\bin\Debug\Assembly-CSharp-firstpass.dll
+C:\Users\Galantir\Documents\GitHub\ProjectA\Temp\bin\Debug\Assembly-CSharp-firstpass.pdb
+C:\Users\Galantir\Documents\GitHub\ProjectA\Temp\bin\Debug\UnityEditor.dll
+C:\Users\Galantir\Documents\GitHub\ProjectA\Temp\bin\Debug\UnityEngine.dll
+C:\Users\Galantir\Documents\GitHub\ProjectA\Temp\bin\Debug\Mono.Cecil.dll
+C:\Users\Galantir\Documents\GitHub\ProjectA\Temp\bin\Debug\nunit.framework.dll
+C:\Users\Galantir\Documents\GitHub\ProjectA\Temp\bin\Debug\Unity.DataContract.dll
+C:\Users\Galantir\Documents\GitHub\ProjectA\Temp\bin\Debug\ICSharpCode.NRefactory.dll
+C:\Users\Galantir\Documents\GitHub\ProjectA\obj\Debug\Assembly-CSharp-firstpass.dll
+C:\Users\Galantir\Documents\GitHub\ProjectA\obj\Debug\Assembly-CSharp-firstpass.pdb
