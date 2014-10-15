@@ -82,6 +82,8 @@ public class Chunk : MonoBehaviour {
         if ((worldPos.z < 0 - (World.Current.Width / 2)) || worldPos.z >= 0 + (World.Current.Width / 2)) {
             return new Block(0);
         }
+        //werkt niet goed omdat een random hier niet mag
+        //dit laat gaten open tussen chunks maar is een tijdelijke test oplossing om blokjes te tekenen
         if (worldPos.y < Random.Range(0, 3) + 1)
             return new Block(1);
         //if (Random.Range(0, 100) == 1)
@@ -103,6 +105,7 @@ public class Chunk : MonoBehaviour {
                     Block block = Blocks[x, y, z];
                     if (block.GetBlockType() == 0) continue;
 
+                    //left
                     if (IsTransparent(x - 1, y, z)) {
                         BuildFace(block, new Vector3(x, y, z), new Vector3(x, y, z) + Vector3.up, new Vector3(x, y, z) + Vector3.up + Vector3.forward, new Vector3(x, y, z) + Vector3.forward, false, verts, uvs, tris);
                     }
@@ -151,12 +154,6 @@ public class Chunk : MonoBehaviour {
         verts.Add(cornerC);
         verts.Add(cornerD);
 
-        //verts.Add(cornerA);
-        //verts.Add(cornerA + up);
-        //verts.Add(cornerA + up + right);
-        //verts.Add(cornerA + right);
-
-
         Vector2 uvWidth = new Vector2(0.125f, 0.125f);
         Vector2 uvCorner = new Vector2(0, 0.875f);
 
@@ -178,6 +175,7 @@ public class Chunk : MonoBehaviour {
         //uvs.Add(new Vector2(1, 1));
         //uvs.Add(new Vector2(1, 0));
 
+
         if (reversed) {
             tris.Add(index + 0);
             tris.Add(index + 1);
@@ -196,15 +194,15 @@ public class Chunk : MonoBehaviour {
     }
 
     public virtual bool IsTransparent(int x, int y, int z) {
-        Block block = GetBlock(x, y, z);
+        Block block = GetBlockLocalPosition(x, y, z);
         //return !block.IsSolid();
-        if (block.GetBlockType() == 0)
+        if (block.GetBlockType() == 0)//regel hierboven zou moeten werken maar had er problemen mee
             return true;
         else
             return false;
     }
 
-    public virtual Block GetBlock(int x, int y, int z) {
+    public virtual Block GetBlockLocalPosition(int x, int y, int z) {
         Vector3 worldPos = new Vector3(x, y, z) + transform.position;
 
         if (!Initialized)
@@ -216,17 +214,17 @@ public class Chunk : MonoBehaviour {
             if (chunk == null) {
                 return GetVirtualBlock(worldPos - transform.position);
             }
-            return chunk.GetBlock(worldPos);
+            return chunk.GetBlockWorldPosition(worldPos);
         }       
         return Blocks[x, y, z];
     }
 
-    public virtual Block GetBlock(Vector3 worldpos) {
+    public virtual Block GetBlockWorldPosition(Vector3 worldpos) {
         worldpos -= transform.position;
         int x = Mathf.FloorToInt(worldpos.x);
         int y = Mathf.FloorToInt(worldpos.y);
         int z = Mathf.FloorToInt(worldpos.z);
-        return GetBlock(x, y, z);
+        return GetBlockLocalPosition(x, y, z);
 
     }
 
