@@ -46,21 +46,30 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\Block.cs" />
-     <Compile Include="Assets\Scripts\BlockTypes.cs" />
-     <Compile Include="Assets\Scripts\Blocks\AirBlock.cs" />
-     <Compile Include="Assets\Scripts\Blocks\BedrockBlock.cs" />
-     <Compile Include="Assets\Scripts\Blocks\DirtBlock.cs" />
-     <Compile Include="Assets\Scripts\Blocks\GrassBlock.cs" />
-     <Compile Include="Assets\Scripts\Blocks\GravelBlock.cs" />
-     <Compile Include="Assets\Scripts\Blocks\ObsidianBlock.cs" />
-     <Compile Include="Assets\Scripts\Blocks\RockBlock.cs" />
-     <Compile Include="Assets\Scripts\Blocks\SandBlock.cs" />
-     <Compile Include="Assets\Scripts\Blocks\SnowBlock.cs" />
-     <Compile Include="Assets\Scripts\Blocks\WaterBlock.cs" />
-     <Compile Include="Assets\Scripts\Chunk.cs" />
-     <Compile Include="Assets\Scripts\IBlockType.cs" />
-     <Compile Include="Assets\Scripts\World.cs" />
+     <Compile Include="Assets\Scripts\Player\PlayerIO.cs" />
+     <Compile Include="Assets\Scripts\World\Block.cs" />
+     <Compile Include="Assets\Scripts\World\BlockTypes.cs" />
+     <Compile Include="Assets\Scripts\World\Blocks\AirBlock.cs" />
+     <Compile Include="Assets\Scripts\World\Blocks\BedrockBlock.cs" />
+     <Compile Include="Assets\Scripts\World\Blocks\DirtBlock.cs" />
+     <Compile Include="Assets\Scripts\World\Blocks\GrassBlock.cs" />
+     <Compile Include="Assets\Scripts\World\Blocks\GravelBlock.cs" />
+     <Compile Include="Assets\Scripts\World\Blocks\ObsidianBlock.cs" />
+     <Compile Include="Assets\Scripts\World\Blocks\RockBlock.cs" />
+     <Compile Include="Assets\Scripts\World\Blocks\SandBlock.cs" />
+     <Compile Include="Assets\Scripts\World\Blocks\SnowBlock.cs" />
+     <Compile Include="Assets\Scripts\World\Blocks\WaterBlock.cs" />
+     <Compile Include="Assets\Scripts\World\Chunk.cs" />
+     <Compile Include="Assets\Scripts\World\IBlockType.cs" />
+     <Compile Include="Assets\Scripts\World\Noise.cs" />
+     <Compile Include="Assets\Scripts\World\TangentSolver.cs" />
+     <Compile Include="Assets\Scripts\World\World.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{AF178CDC-93EE-D9B7-23F4-BFB24ADD0E49}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
+    <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
+      <Project>{E06271A8-BE3A-2530-B971-BAB21ADCCE8D}</Project>      <Name>Assembly-UnityScript-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

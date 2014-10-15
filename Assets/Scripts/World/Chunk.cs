@@ -78,20 +78,22 @@ public class Chunk : MonoBehaviour {
     public Block GetVirtualBlock(Vector3 pos) {
         Vector3 worldPos = pos + transform.position;
 
-        if ((worldPos.y < 0) || worldPos.y >= World.Current.Height)
-            return new Block(0);
-
-        if ((worldPos.x < 0 - (World.Current.Width / 2)) || worldPos.x >= 0 + (World.Current.Width / 2)) {
-            return new Block(0);
-        }
-
-        if ((worldPos.z < 0 - (World.Current.Width / 2)) || worldPos.z >= 0 + (World.Current.Width / 2)) {
-            return new Block(0);
-        }
-        //werkt niet goed omdat een random hier niet mag
-        //dit laat gaten open tussen chunks maar is een tijdelijke test oplossing om blokjes te tekenen
-        if (worldPos.y < Random.Range(0, 3) + 1)
+        if((worldPos.y < 0))
             return new Block(1);
+
+        if (worldPos.y >= World.Current.Height)
+            return new Block(0);
+
+        //if ((worldPos.x < 0 - (World.Current.Width / 2)) || worldPos.x >= 0 + (World.Current.Width / 2)) {
+        //    return new Block(0);
+        //}
+
+        //if ((worldPos.z < 0 - (World.Current.Width / 2)) || worldPos.z >= 0 + (World.Current.Width / 2)) {
+        //    return new Block(0);
+        //}
+        
+        if (worldPos.y < 3)
+            return new Block(2);
         //if (Random.Range(0, 100) == 1)
         return new Block(0);
         //else
@@ -147,6 +149,7 @@ public class Chunk : MonoBehaviour {
         VisualMesh.triangles = tris.ToArray();
         VisualMesh.RecalculateBounds();
         VisualMesh.RecalculateNormals();
+        TangentSolver.calculateMeshTangents(VisualMesh);
 
         meshFilter.mesh = VisualMesh;
         meshCollider.sharedMesh = null;
@@ -239,5 +242,51 @@ public class Chunk : MonoBehaviour {
 
     }
 
+    public bool SetBlock(Block block, Vector3 worldpos) {
+        worldpos -= transform.position;
+        return SetBlock(block, Mathf.FloorToInt(worldpos.x), Mathf.FloorToInt(worldpos.y), Mathf.FloorToInt(worldpos.z));
+    }
+
+    public bool SetBlockNoUpdateWorldPos(Block block, Vector3 worldpos) {
+        worldpos -= transform.position;
+        return SetBlockNoUpdateLocal(block, Mathf.FloorToInt(worldpos.x), Mathf.FloorToInt(worldpos.y), Mathf.FloorToInt(worldpos.z));
+    }
+
+    public bool SetBlock(Block block, int x, int y, int z) {
+        if ((x < 0) || (y < 0) || (z < 0) || (x >= Width) || (y >= Height) || (z >= Width))
+            return false;
+        Blocks[x, y, z] = block;
+        StartCoroutine(CreateVisualMesh());
+        if (x == 0) {
+            Chunk chunk = World.FindChunk(transform.position + new Vector3(x - 1, y, z));
+            if (chunk != null)
+                StartCoroutine(chunk.CreateVisualMesh());
+        }
+        if (x == Width - 1) {
+            Chunk chunk = World.FindChunk(transform.position + new Vector3(x + 1, y, z));
+            if (chunk != null)
+                StartCoroutine(chunk.CreateVisualMesh());
+        }
+        if (z == 0) {
+            Chunk chunk = World.FindChunk(transform.position + new Vector3(x, y, z - 1));
+            if (chunk != null)
+                StartCoroutine(chunk.CreateVisualMesh());
+        }
+        if (z == Width - 1) {
+            Chunk chunk = World.FindChunk(transform.position + new Vector3(x, y, z + 1));
+            if (chunk != null)
+                StartCoroutine(chunk.CreateVisualMesh());
+        }
+        return true;
+    }
+
+    public bool SetBlockNoUpdateLocal(Block block, int x, int y, int z) {
+        if ((x < 0) || (y < 0) || (z < 0) || (x >= Width) || (y >= Height) || (z >= Width))
+            return false;
+        if (Blocks[x, y, z].GetBlockType() == block.GetBlockType())
+            return false;
+        Blocks[x, y, z] = block;
+        return true;
+    }
 }
 
