@@ -2,11 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 
+//componenten die op het GameObject aanwezig MOETEN zijn
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshCollider))]
 [RequireComponent(typeof(MeshFilter))]
 public class Chunk : MonoBehaviour {
 
+    //internal zie world class
     internal int Width {
         get {
             return World.Current.ChunkWidth;
@@ -24,9 +26,9 @@ public class Chunk : MonoBehaviour {
 
     internal MeshCollider meshCollider;
     internal MeshFilter meshFilter;
-    internal bool Initialized = false;    
+    internal bool Initialized = false;
 
-	// Use this for initialization
+    //gebruikt voor initialisatie binnen class
 	void Start () {
         this.MeshRenderer = GetComponent<MeshRenderer>();
         this.meshCollider = GetComponent<MeshCollider>();
@@ -40,12 +42,13 @@ public class Chunk : MonoBehaviour {
             StartCoroutine(CalculateChunk());
         }
 	}
-	
-	// Update is called once per frame
+
+    // Update naam zegt genoeg. LET OP NIET BEDOELD VOOR PHYSICS UPDATES
 	void Update () {
 	
 	}
 
+    //vult de chunk met blokjes door GetVirtualBlock voor iedere positie binnen de chunk aan te roepen
     public virtual IEnumerator CalculateChunk() {
         this.Blocks = new Block[Width, Height, Width];
         for (int x = 0; x < Width; x++) {
@@ -60,6 +63,7 @@ public class Chunk : MonoBehaviour {
         
         yield return 0;
        
+        //dit zorgt er puur voor dat er maar 1 chunk op elk moment laadt
         World.Current.ChunksWaiting.Remove(this);
         World.Current.ChunksLoading.Remove(this);
         if (World.Current.ChunksWaiting.Count > 0 && World.Current.ChunksLoading.Count == 0) {
@@ -69,6 +73,8 @@ public class Chunk : MonoBehaviour {
         StartCoroutine(CreateVisualMesh());
     }
 
+    //hier wordt bepaald welke posite welk blokje krijgt
+    //Hier moet het dus allemaal gaan gebeuren en dit bevat nu nog puur testcode
     public Block GetVirtualBlock(Vector3 pos) {
         Vector3 worldPos = pos + transform.position;
 
@@ -92,6 +98,7 @@ public class Chunk : MonoBehaviour {
         //    return new Block(0);
     }
 
+    //opbouw van het 3d model van de chunk
     public virtual IEnumerator CreateVisualMesh() {
         VisualMesh = new Mesh();
 
@@ -146,6 +153,7 @@ public class Chunk : MonoBehaviour {
         meshCollider.sharedMesh = VisualMesh; 
     }
 
+    //gebruikt bij de opbouw van het 3d model
     public virtual void BuildFace(Block block, Vector3 cornerA, Vector3 cornerB, Vector3 cornerC, Vector3 cornerD, bool reversed, List<Vector3> verts, List<Vector2> uvs, List<int> tris) {
         int index = verts.Count;
 
@@ -193,6 +201,7 @@ public class Chunk : MonoBehaviour {
         }
     }
 
+    //checkt of het een doorzichtig blokje is
     public virtual bool IsTransparent(int x, int y, int z) {
         Block block = GetBlockLocalPosition(x, y, z);
         //return !block.IsSolid();
@@ -202,6 +211,7 @@ public class Chunk : MonoBehaviour {
             return false;
     }
 
+    //zoek het blokje met de lokale positie binnen de chunk
     public virtual Block GetBlockLocalPosition(int x, int y, int z) {
         Vector3 worldPos = new Vector3(x, y, z) + transform.position;
 
@@ -219,6 +229,7 @@ public class Chunk : MonoBehaviour {
         return Blocks[x, y, z];
     }
 
+    //zoek blokje op basis van world positie(zelfs in nog niet bestaande chunks)
     public virtual Block GetBlockWorldPosition(Vector3 worldpos) {
         worldpos -= transform.position;
         int x = Mathf.FloorToInt(worldpos.x);
