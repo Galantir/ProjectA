@@ -6,12 +6,16 @@ using UnityEngine;
 
 
 public class WaterBlock : IBlockType {
-    public bool IsSolid(Block block) {
+    public bool IsSolid() {
         return false;
     }
    
-    public int GetUVRow(Block block) {
+    public int GetUVRow() {
         return 1;
-    }  
+    }
+
+    public bool IsTransparent() {
+        return false; ;
+    }
 }
 

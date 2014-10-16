@@ -4,12 +4,15 @@ using System.Collections;
 public class AirBlock : IBlockType {
 
 
-    public bool IsSolid(Block block) {
+    public bool IsSolid() {
         return false;
     }    
 
-    public int GetUVRow(Block block) {
+    public int GetUVRow() {
         return 0;
     }
-    
+
+    public bool IsTransparent() {
+        return true;
+    }
 }

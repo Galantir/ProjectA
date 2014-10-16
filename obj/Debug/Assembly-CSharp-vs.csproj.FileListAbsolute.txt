@@ -9,7 +9,6 @@ E:\Unity\ProjectA\Temp\bin\Debug\ICSharpCode.NRefactory.dll
 E:\Unity\ProjectA\obj\Debug\Assembly-CSharp.dll
 E:\Unity\ProjectA\obj\Debug\Assembly-CSharp.pdb
 E:\Unity\ProjectA\obj\Debug\Assembly-CSharp-vs.csprojResolveAssemblyReference.cache
-C:\Users\Galantir\Documents\GitHub\ProjectA\obj\Debug\Assembly-CSharp-vs.csprojResolveAssemblyReference.cache
 C:\Users\Galantir\Documents\GitHub\ProjectA\Temp\bin\Debug\Assembly-CSharp.dll
 C:\Users\Galantir\Documents\GitHub\ProjectA\Temp\bin\Debug\Assembly-CSharp.pdb
 C:\Users\Galantir\Documents\GitHub\ProjectA\Temp\bin\Debug\Assembly-UnityScript-firstpass.dll
@@ -19,5 +18,7 @@ C:\Users\Galantir\Documents\GitHub\ProjectA\Temp\bin\Debug\Mono.Cecil.dll
 C:\Users\Galantir\Documents\GitHub\ProjectA\Temp\bin\Debug\nunit.framework.dll
 C:\Users\Galantir\Documents\GitHub\ProjectA\Temp\bin\Debug\Unity.DataContract.dll
 C:\Users\Galantir\Documents\GitHub\ProjectA\Temp\bin\Debug\ICSharpCode.NRefactory.dll
+C:\Users\Galantir\Documents\GitHub\ProjectA\obj\Debug\Assembly-CSharp-vs.csprojResolveAssemblyReference.cache
 C:\Users\Galantir\Documents\GitHub\ProjectA\obj\Debug\Assembly-CSharp.dll
 C:\Users\Galantir\Documents\GitHub\ProjectA\obj\Debug\Assembly-CSharp.pdb
+C:\Users\Galantir\Documents\GitHub\ProjectA\Temp\bin\Debug\Assembly-CSharp-firstpass.pdb

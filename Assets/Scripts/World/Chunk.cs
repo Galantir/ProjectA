@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using SimplexNoise;
+using System.Linq;
 
 //componenten die op het GameObject aanwezig MOETEN zijn
 [RequireComponent(typeof(MeshRenderer))]
@@ -37,8 +39,7 @@ public class Chunk : MonoBehaviour {
         World.Current.Chunks.Add(this);
         World.Current.ChunksWaiting.Add(this);
 
-        if (World.Current.ChunksWaiting[0] == this && World.Current.ChunksLoading.Count == 0) {
-            World.Current.ChunksLoading.Add(this);
+        if (World.Current.ChunksWaiting[0] == this) {           
             StartCoroutine(CalculateChunk());
         }
 	}
@@ -56,21 +57,21 @@ public class Chunk : MonoBehaviour {
                 for (int z = 0; z < Width; z++) {
                     this.Blocks[x, y, z] = GetVirtualBlock(new Vector3(x,y,z));                    
                 }
-            }            
+            }
+            //yield return 0;
         }
         
         Initialized = true;
+
+        StartCoroutine(CreateVisualMesh());
         
-        yield return 0;
-       
         //dit zorgt er puur voor dat er maar 1 chunk op elk moment laadt
-        World.Current.ChunksWaiting.Remove(this);
-        World.Current.ChunksLoading.Remove(this);
-        if (World.Current.ChunksWaiting.Count > 0 && World.Current.ChunksLoading.Count == 0) {
-            World.Current.ChunksLoading.Add(World.Current.ChunksWaiting[0]);
+        World.Current.ChunksWaiting.Remove(this);       
+        if (World.Current.ChunksWaiting.Count > 0) {           
             StartCoroutine(World.Current.ChunksWaiting[0].CalculateChunk());
         }
-        StartCoroutine(CreateVisualMesh());
+
+        yield return 0;
     }
 
     //hier wordt bepaald welke posite welk blokje krijgt
@@ -81,23 +82,46 @@ public class Chunk : MonoBehaviour {
         if((worldPos.y < 0))
             return new Block(1);
 
-        if (worldPos.y >= World.Current.Height)
+        if (worldPos.y >= World.Current.ChunkHeight)
             return new Block(0);
 
-        //if ((worldPos.x < 0 - (World.Current.Width / 2)) || worldPos.x >= 0 + (World.Current.Width / 2)) {
-        //    return new Block(0);
-        //}
+        float height = Fbm2DNoise(worldPos, 4, 256, 0.5f) * 64 + 32;
 
-        //if ((worldPos.z < 0 - (World.Current.Width / 2)) || worldPos.z >= 0 + (World.Current.Width / 2)) {
-        //    return new Block(0);
-        //}
-        
         if (worldPos.y < 3)
             return new Block(2);
-        //if (Random.Range(0, 100) == 1)
-        return new Block(0);
-        //else
-        //    return new Block(0);
+        if (worldPos.y < height)
+            return new Block(3);        
+        return new Block(0);       
+    }
+
+    public float CalculateNoiseValue3D(Vector3 pos, Vector3 offset, float scale) {
+        float NoiseX = Mathf.Abs(((pos.x) + offset.x) * scale);
+        float NoiseY = Mathf.Abs(((pos.y) + offset.y) * scale);
+        float NoiseZ = Mathf.Abs(((pos.z) + offset.z) * scale);
+        return Noise.Generate(NoiseX, NoiseY, NoiseZ);
+    }
+
+    public float CalculateNoiseValue2D(Vector3 pos, Vector3 offset, float scale) {
+        float NoiseX = Mathf.Abs((pos.x + offset.x) * scale);
+        float NoiseZ = Mathf.Abs((pos.z + offset.z) * scale);
+        return Noise.Generate(NoiseX, NoiseZ);
+    }
+
+    public float Fbm2DNoise(Vector3 pos, int o, float f, float g) {
+        float NoiseX = Mathf.Abs(pos.x + World.Current.Grain0Offset.x);
+        float NoiseZ = Mathf.Abs(pos.z + World.Current.Grain0Offset.z);
+        float result = 0;
+        float gain = g;
+        float frequency = 1.0f / f;
+        float amplitude = gain;
+        float lacunarity = 2.0f;
+
+        for (int i = 0; i < o; i++) {
+            result += Noise.Generate((float)NoiseX * frequency, (float)NoiseZ * frequency) * amplitude;
+            frequency *= lacunarity;
+            amplitude *= gain;
+        }
+        return result;
     }
 
     //opbouw van het 3d model van de chunk
@@ -113,6 +137,8 @@ public class Chunk : MonoBehaviour {
                 for (int z = 0; z < Width; z++) {
                     Block block = Blocks[x, y, z];
                     if (block.GetBlockType() == 0) continue;
+                    //vertraagd enorm
+                    //List<bool> neighbors = GetNeighboursBool(transform.position + new Vector3(x, y, z)).ToList();
 
                     //left
                     if (IsTransparent(x - 1, y, z)) {
@@ -141,7 +167,7 @@ public class Chunk : MonoBehaviour {
                     }
                 }
             }
-            yield return 0;
+            //yield return 0;
         }
 
         VisualMesh.vertices = verts.ToArray();
@@ -153,7 +179,9 @@ public class Chunk : MonoBehaviour {
 
         meshFilter.mesh = VisualMesh;
         meshCollider.sharedMesh = null;
-        meshCollider.sharedMesh = VisualMesh; 
+        meshCollider.sharedMesh = VisualMesh;
+
+        yield return 0;
     }
 
     //gebruikt bij de opbouw van het 3d model
@@ -288,5 +316,13 @@ public class Chunk : MonoBehaviour {
         Blocks[x, y, z] = block;
         return true;
     }
+
+    public IEnumerable<bool> GetNeighboursBool(Vector3 position) {
+        for (int i = 0; i < MathHelper._direction.Count; i++) {
+            Vector3 worldpos = position + MathHelper._direction[i];
+            yield return !GetBlockWorldPosition(worldpos).IsTransparent();
+        }
+    }
+
 }
 

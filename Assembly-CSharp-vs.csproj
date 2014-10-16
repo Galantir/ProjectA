@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Player\PlayerIO.cs" />
+     <Compile Include="Assets\Scripts\World\Ambient.cs" />
      <Compile Include="Assets\Scripts\World\Block.cs" />
      <Compile Include="Assets\Scripts\World\BlockTypes.cs" />
      <Compile Include="Assets\Scripts\World\Blocks\AirBlock.cs" />
@@ -60,7 +61,9 @@
      <Compile Include="Assets\Scripts\World\Blocks\SnowBlock.cs" />
      <Compile Include="Assets\Scripts\World\Blocks\WaterBlock.cs" />
      <Compile Include="Assets\Scripts\World\Chunk.cs" />
+     <Compile Include="Assets\Scripts\World\Direction.cs" />
      <Compile Include="Assets\Scripts\World\IBlockType.cs" />
+     <Compile Include="Assets\Scripts\World\MathHelper.cs" />
      <Compile Include="Assets\Scripts\World\Noise.cs" />
      <Compile Include="Assets\Scripts\World\TangentSolver.cs" />
      <Compile Include="Assets\Scripts\World\World.cs" />
