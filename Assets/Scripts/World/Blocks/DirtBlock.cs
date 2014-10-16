@@ -3,12 +3,15 @@ using System.Collections;
 
 public class DirtBlock : IBlockType {
 
-    public bool IsSolid(Block block) {
+    public bool IsSolid() {
         return true;
     }
     
-    public int GetUVRow(Block block) {
+    public int GetUVRow() {
         return 0;
     }
-  
+
+    public bool IsTransparent() {
+        return false; ;
+    }
 }

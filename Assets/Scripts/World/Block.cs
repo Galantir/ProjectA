@@ -20,12 +20,15 @@ public struct Block {
     }
 
     public bool IsSolid() {
-        return BlockTypes.GetBlockType(BlockType).IsSolid(this);
+        return BlockTypes.GetBlockType(BlockType).IsSolid();
     } 
 
     public int GetUVRow() {
-        return BlockTypes.GetBlockType(BlockType).GetUVRow(this);
+        return BlockTypes.GetBlockType(BlockType).GetUVRow();
     }
 
+    public bool IsTransparent() {
+        return BlockTypes.GetBlockType(BlockType).IsTransparent();
+    }
 }
 
